@@ -17,5 +17,5 @@ test:
 production:
   <<: *default
   database: el_traning_prodction
-  username: root
+  username: <%= ENV['APP_DATABASE_USERNAME'] %>
   password: <%= ENV['APP_DATABASE_PASSWORD'] %>
