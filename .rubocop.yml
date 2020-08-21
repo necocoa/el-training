@@ -1,0 +1,88 @@
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    - 'config/**/*'
+    - 'node_modules/**/*'
+    - 'bin/**/*'
+
+######## Style ########
+# 日本語のコメントを許可する
+Style/AsciiComments:
+  Enabled: false
+
+# ドキュメントの無い public class を許可する
+Style/Documentation:
+  Enabled: false
+
+# Class名の::を許可する
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# redirect_to xxx and return のイディオムを維持したい
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+# 文字リテラルのイミュータブル宣言を無視（freezeになるのはRuby3以降）
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# 条件式の方を意識させたい場合には後置の if/unless を使わない方が分かりやすい
+Style/IfUnlessModifier:
+  Enabled: false
+
+# 1_000_000 と区切り文字が 2 個以上必要になる場合のみ _ 区切りを必須にする
+Style/NumericLiterals:
+  MinDigits: 7
+
+######## Layout ########
+# private/protected は一段深くインデントする
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+# 行の長さを変更
+Layout/LineLength:
+  IgnoredPatterns: ['\A#'] # コメントは除外
+  Exclude:
+    - 'db/fixtures/**/*' # seedファイルは除外
+    - 'spec/**/*' # specファイルは除外
+
+######## Metrics ########
+# メソッドのサイズ
+Metrics/AbcSize:
+  Max: 24
+
+# 1メソッドの長さ
+Metrics/MethodLength:
+  Max: 20
+
+# Classの長さ
+Metrics/ClassLength:
+  Max: 120
+
+# Blockの長さ 自動生成ファイルとspec除外
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'lib/tasks/auto_annotate_models.rake'
+    - 'Guardfile'
+    - 'config/routes.rb'
+
+# GemのOrderしない
+Bundler/OrderedGems:
+  Enabled: false
+
+# 自動生成ファイル除外
+Style/BlockComments:
+  Exclude:
+    - 'spec/spec_helper.rb'
+Style/MixinUsage:
+  Exclude:
+    - 'bin/**'
+Layout/HashAlignment:
+  Exclude:
+    - 'lib/tasks/auto_annotate_models.rake'
