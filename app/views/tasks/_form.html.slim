@@ -1,10 +1,17 @@
-= form_with(model: task) do |form|
+= form_with(model: task, local: true) do |form|
+  - if task.errors.any?
+    #error_explanation
+      h2 タスクが保存されませんでした
+      ul
+        - task.errors.full_messages.each do |message|
+          li = message
+
   .
-    = form.label :name
+    p = form.label :name
     = form.text_field :name
 
   .
-    = form.label :description
+    p = form.label :description
     = form.text_area :description
 
   .
