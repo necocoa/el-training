@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_08_21_080305) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name", null: false
-    t.text "description", default: "", null: false
+    t.text "description"
   end
 
 end

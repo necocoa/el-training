@@ -4,7 +4,7 @@ class CreateTasks < ActiveRecord::Migration[6.0]
       t.timestamps
 
       t.string :name, null: false
-      t.text :description, null: false, default: ''
+      t.text :description
     end
   end
 end
