@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit update]
+  before_action :set_task, only: %i[show edit update destroy]
 
   def index
     @tasks = Task.all
@@ -28,6 +28,14 @@ class TasksController < ApplicationController
       redirect_to @task, notice: 'タスクを編集しました。'
     else
       render :edit
+    end
+  end
+
+  def destroy
+    if @task.destroy
+      redirect_to tasks_path, notice: 'タスクを削除しました。'
+    else
+      redirect_to tasks_path, alert: 'タスクの削除に失敗しました。'
     end
   end
 
