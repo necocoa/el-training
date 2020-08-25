@@ -3,3 +3,4 @@ h1 タスク詳細
 h2 = @task.name
 p = @task.description
 = link_to '編集', edit_task_path(@task.id)
+= link_to ' 削除', @task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
