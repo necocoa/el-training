@@ -1,0 +1,18 @@
+= form_with(model: task, local: true) do |form|
+  - if task.errors.any?
+    #error_explanation
+      h2 タスクが保存されませんでした
+      ul
+        - task.errors.full_messages.each do |message|
+          li = message
+
+  .
+    p = form.label :name
+    = form.text_field :name, size: 55, maxlength: 50, required: true
+
+  .
+    p = form.label :description
+    = form.text_area :description, size: "45x5", maxlength: 1000
+
+  .
+    = form.submit
