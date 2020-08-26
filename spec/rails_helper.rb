@@ -64,4 +64,15 @@ RSpec.configure do |config|
 
   # FactoryBotの省略
   config.include FactoryBot::Syntax::Methods
+
+  config.before(:each) do |example|
+    # JSを利用しないSystem testの場合、headless cromeを利用する
+    if example.metadata[:type] == :system
+      if example.metadata[:js]
+        driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+      else
+        driven_by :rack_test
+      end
+    end
+  end
 end
