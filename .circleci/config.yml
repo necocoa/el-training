@@ -18,6 +18,7 @@ jobs:
           DATABASE_HOST: 127.0.0.1
           DATABASE_USER: circleci
           DATABASE_PASSWORD: password
+          TZ: Asia/Tokyo
       - image: circleci/postgres:12.4
         environment:
           POSTGRES_DB: el_traning_test
