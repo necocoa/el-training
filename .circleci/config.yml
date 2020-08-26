@@ -8,6 +8,19 @@ jobs:
   test_and_lint:
     docker:
       - image: circleci/ruby:2.7.1-node-browsers
+        environment:
+          RAILS_ENV: test
+          BUNDLE_JOBS: "4"
+          BUNDLE_RETRY: "3"
+          BUNDLE_PATH: vendor/bundle
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USER: circleci
+          DATABASE_PASSWORD: password
+      - image: circleci/postgres:12.4
+        environment:
+          POSTGRES_DB: el_traning_test
+          POSTGRES_USER: circleci
+          POSTGRES_PASSWORD: password
     steps:
       - checkout
       - run:
@@ -25,18 +38,26 @@ jobs:
             - v1-dependencies-
       - run:
           name: Bundle Install
-          command: bundle install --jobs=4 --retry=3 --path vendor/bundle
+          command: bundle check --path vendor/bundle || bundle install --deployment
       - save_cache:
           paths:
             - vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
+          name: DB の待機
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
           name: Create DB
-          command: bin/rails db:create db:schema:load --trace RAILS_ENV=test
+          command: bin/rails db:schema:load --trace
       - run:
           name: Run Tests
-          command: bundle exec rspec RAILS_ENV=test
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: /tmp/test-results
       - run:
