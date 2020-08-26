@@ -10,7 +10,16 @@ module ElTraining
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
-    config.generators.template_engine = :slim
+    config.generators do |g|
+      # Template engine setting
+      g.template_engine = :slim
+      g.helper = false
+      g.assets false
+      # RSpec setting
+      g.test_framework = :rspec
+      g.helper_specs = false
+      g.view_specs = false
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
