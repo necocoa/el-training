@@ -4,7 +4,13 @@ table
   thead
     tr
       th タスク名
-      th 終了期限
+      th
+        - if request.fullpath.include?('desc')
+          = link_to '終了期限▼', end_date: 'asc'
+        - elsif request.fullpath.include?('asc')
+          = link_to '終了期限▲', end_date: 'desc'
+        - else
+          = link_to '終了期限', end_date: 'desc'
   tbody
     - @tasks.each do |task|
       tr.task_list
