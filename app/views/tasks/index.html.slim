@@ -2,7 +2,7 @@ h1 タスク一覧
 
 ul
   - @tasks.each do |task|
-    li
+    li.task_list
        = link_to task.name, task_path(task.id)
        = link_to ' 編集', edit_task_path(task.id)
        = link_to ' 削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }

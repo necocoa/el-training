@@ -2,10 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Tasks', type: :system do
   describe 'index' do
-    let!(:task) { create(:task) }
-    it 'タスクが表示される' do
+    it 'タスクが作成日の降順で表示される' do
+      old_task = create(:task, name: '古いタスク')
+      new_task = create(:task, name: '新しいタスク')
+      old_task.update(name: '古いタスクを更新') # 更新しても順番が変わらないことを確認するため
+
       visit tasks_path
-      expect(page).to have_content task.name
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content new_task.name
+      expect(tasks[1]).to have_content old_task.name
     end
   end
 
