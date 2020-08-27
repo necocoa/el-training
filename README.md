@@ -1,4 +1,14 @@
-# README
+# 万葉RoR研修
+タスク管理アプリ
+
+## デプロイ方法
+1. masterにマージをする
+2. CIがパスする
+3. herokuに自動デプロイされる
+
+## Version
+* Ruby  2.7.1
+* Rails 6.0.3.2
 
 ## ER図
 ```plantuml
