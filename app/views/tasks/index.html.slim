@@ -6,11 +6,11 @@ table
       th タスク名
       th
         - if request.fullpath.include?('desc')
-          = link_to '終了期限▼', end_date: 'asc'
+          = link_to '終了期限▼', tasks_path(end_date: 'asc'), id: 'end_date_title'
         - elsif request.fullpath.include?('asc')
-          = link_to '終了期限▲', end_date: 'desc'
+          = link_to '終了期限▲', tasks_path(end_date: 'desc'), id: 'end_date_title'
         - else
-          = link_to '終了期限', end_date: 'desc'
+          = link_to '終了期限', tasks_path(end_date: 'asc'), id: 'end_date_title'
   tbody
     - @tasks.each do |task|
       tr.task_list
