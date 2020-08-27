@@ -12,6 +12,21 @@ RSpec.describe 'Tasks', type: :system do
       expect(tasks[0]).to have_content new_task.name
       expect(tasks[1]).to have_content old_task.name
     end
+
+    it 'タスクを終了期限でソートできる' do
+      slow_end_date_task = create(:task, name: '期限が遅いタスク', end_date: '2020-02-01')
+      early_end_date_task = create(:task, name: '期限が早いタスク', end_date: '2020-01-01')
+
+      visit tasks_path
+
+      click_link 'end_date_title'
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content early_end_date_task.name
+
+      click_link 'end_date_title'
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content slow_end_date_task.name
+    end
   end
 
   describe 'show' do
