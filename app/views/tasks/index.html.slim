@@ -11,10 +11,12 @@ table
           = link_to '終了期限▲', tasks_path(end_date_sort_key: 'desc'), id: 'end_date_title'
         - else
           = link_to '終了期限', tasks_path(end_date_sort_key: 'asc'), id: 'end_date_title'
+      th ステータス
   tbody
     - @tasks.each do |task|
       tr.task_list
         td = link_to task.name, task
         td = task.end_date
+        td = task.human_attribute_enum(:status)
         td = link_to '編集', edit_task_path(task)
         td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
