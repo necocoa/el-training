@@ -2,5 +2,9 @@ h1 タスク詳細
 
 h2 = @task.name
 p = @task.description
+p
+  | 終了期限: 
+  = @task.end_date
+
 = link_to '編集', edit_task_path(@task.id)
 = link_to ' 削除', @task, method: :delete, id: 'task_delete', data: { confirm: 'タスクを削除しますか？' }

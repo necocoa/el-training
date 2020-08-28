@@ -1,8 +1,20 @@
 h1 タスク一覧
 
-ul
-  - @tasks.each do |task|
-    li.task_list
-       = link_to task.name, task_path(task.id)
-       = link_to ' 編集', edit_task_path(task.id)
-       = link_to ' 削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
+table
+  thead
+    tr
+      th タスク名
+      th
+        - if request.fullpath.include?('desc')
+          = link_to '終了期限▼', tasks_path(end_date_sort_key: 'asc'), id: 'end_date_title'
+        - elsif request.fullpath.include?('asc')
+          = link_to '終了期限▲', tasks_path(end_date_sort_key: 'desc'), id: 'end_date_title'
+        - else
+          = link_to '終了期限', tasks_path(end_date_sort_key: 'asc'), id: 'end_date_title'
+  tbody
+    - @tasks.each do |task|
+      tr.task_list
+        td = link_to task.name, task
+        td = task.end_date
+        td = link_to '編集', edit_task_path(task)
+        td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }

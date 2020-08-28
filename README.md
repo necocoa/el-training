@@ -31,7 +31,7 @@ entity tasks {
   description: text
   status: integer
   priority: integer
-  end_period: datetime
+  end_date: datetime
   user_id: integer (FK)
 }
 
