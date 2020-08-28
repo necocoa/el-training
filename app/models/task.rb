@@ -2,6 +2,8 @@ class Task < ApplicationRecord
   validates :name, presence: true, length: { in: 1..50 }
   validates :description, length: { maximum: 1000 }
 
+  enum status: { not_started: 0, in_start: 1, completed: 2 }
+
   scope :end_date_sort, ->(sort_key) do
     case sort_key&.downcase
     when 'asc' then order(end_date: :asc)
