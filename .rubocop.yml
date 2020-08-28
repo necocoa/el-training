@@ -39,6 +39,10 @@ Style/IfUnlessModifier:
 Style/NumericLiterals:
   MinDigits: 7
 
+# Lambda処理をすべてアロー演算子で表記する（デフォルトは1行: アロー演算子, 複数行: Lambda）
+Style/Lambda:
+  EnforcedStyle: literal
+
 ######## Layout ########
 # private/protected は一段深くインデントする
 Layout/IndentationConsistency:
