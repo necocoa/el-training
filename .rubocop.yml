@@ -54,6 +54,7 @@ Layout/LineLength:
   Exclude:
     - 'db/fixtures/**/*' # seedファイルは除外
     - 'spec/**/*' # specファイルは除外
+    - 'db/migrate/**/*' # migrateファイルは除外
 
 ######## Metrics ########
 # メソッドのサイズ
