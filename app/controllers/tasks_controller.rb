@@ -2,7 +2,8 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
-    @tasks = Task.end_date_sort(params[:end_date_sort_key]).order(created_at: :desc)
+    @q = Task.ransack(params[:q])
+    @tasks = @q.result.order(created_at: :desc)
   end
 
   def show; end

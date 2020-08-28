@@ -11,4 +11,12 @@ class Task < ApplicationRecord
     else order(end_date: :asc)
     end
   end
+
+  def self.statuses_search_values
+    statuses.map { |k, v| [human_attribute_enum_value(:status, k), v.to_i] }
+  end
+
+  def self.statuses_select_values
+    statuses.map { |k, _| [human_attribute_enum_value(:status, k), k] }
+  end
 end
