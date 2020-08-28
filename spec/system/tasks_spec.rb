@@ -56,7 +56,7 @@ RSpec.describe 'Tasks', type: :system do
         fill_in 'task[description]', with: 'Task description'
         click_button :commit
 
-        expect(page).to have_content 'Nameを入力してください'
+        expect(page).to have_content 'タスク名を入力してください'
       end
     end
   end

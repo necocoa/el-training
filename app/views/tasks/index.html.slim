@@ -1,3 +1,6 @@
+- if @tasks.present?
+  - task_statuses = @tasks.statuses.map { |k, _| [@tasks.first.class.human_attribute_enum_value('status', k), k] }
+
 h1 タスク一覧
 
 table
@@ -18,5 +21,10 @@ table
         td = link_to task.name, task
         td = task.end_date
         td = task.human_attribute_enum(:status)
+        td
+          = form_with(model: task, local: true) do |form|
+            = select :task, :status, task_statuses
+            = form.submit
+
         td = link_to '編集', edit_task_path(task)
         td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
