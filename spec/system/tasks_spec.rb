@@ -157,7 +157,8 @@ RSpec.describe 'Tasks', type: :system do
   end
 
   describe 'create' do
-    it 'タスクが作成され、作成されたタスクが表示される' do
+    # TODO: ログイン機能を作ったときに変更する
+    pending 'タスクが作成され、作成されたタスクが表示される' do
       visit new_task_path
 
       fill_in 'task[name]', with: 'Task name'
