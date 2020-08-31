@@ -1,6 +1,18 @@
 ---
 ja:
   activerecord:
+    models:
+      task: タスク
+    attributes:
+      task:
+        name: タスク名
+        description: 詳細
+        end_date: 終了期限
+        status: ステータス
+      task/status:
+        not_started: 未着手
+        in_start: 着手中
+        completed: 完了
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"

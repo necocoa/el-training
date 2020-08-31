@@ -2,7 +2,8 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
-    @tasks = Task.end_date_sort(params[:end_date_sort_key]).order(created_at: :desc)
+    @q = Task.ransack(params[:q])
+    @tasks = @q.result.order(created_at: :desc).limit(100)
   end
 
   def show; end
@@ -46,6 +47,6 @@ class TasksController < ApplicationController
     end
 
     def task_params
-      params.require(:task).permit(:name, :description, :end_date)
+      params.require(:task).permit(:name, :description, :end_date, :status)
     end
 end

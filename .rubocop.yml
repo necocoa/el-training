@@ -54,6 +54,7 @@ Layout/LineLength:
   Exclude:
     - 'db/fixtures/**/*' # seedファイルは除外
     - 'spec/**/*' # specファイルは除外
+    - 'db/migrate/**/*' # migrateファイルは除外
 
 ######## Metrics ########
 # メソッドのサイズ
@@ -79,6 +80,11 @@ Metrics/BlockLength:
 # GemのOrderしない
 Bundler/OrderedGems:
   Enabled: false
+
+# Capybaraのfind_by_**が反映しないようにspec除外
+Rails/DynamicFindBy:
+  Exclude:
+    - 'spec/**/*'
 
 # 自動生成ファイル除外
 Style/BlockComments:
