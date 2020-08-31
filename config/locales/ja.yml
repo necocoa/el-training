@@ -9,10 +9,15 @@ ja:
         description: 詳細
         end_date: 終了期限
         status: ステータス
+        priority: 優先順位
       task/status:
         not_started: 未着手
         in_start: 着手中
         completed: 完了
+      task/priority:
+        low: 低
+        middle: 中
+        high: 高
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"
