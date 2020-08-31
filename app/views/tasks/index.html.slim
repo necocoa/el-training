@@ -39,3 +39,7 @@ table
 
         td = link_to '編集', edit_task_path(task)
         td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
+
+.
+  = paginate @tasks
+  = page_entries_info @tasks
