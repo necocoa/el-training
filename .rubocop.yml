@@ -81,6 +81,11 @@ Metrics/BlockLength:
 Bundler/OrderedGems:
   Enabled: false
 
+# Capybaraのfind_by_**が反映しないようにspec除外
+Rails/DynamicFindBy:
+  Exclude:
+    - 'spec/**/*'
+
 # 自動生成ファイル除外
 Style/BlockComments:
   Exclude:

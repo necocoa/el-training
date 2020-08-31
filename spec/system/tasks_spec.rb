@@ -19,13 +19,61 @@ RSpec.describe 'Tasks', type: :system do
 
       visit tasks_path
 
+      # ソートリンクを押すと初回は降順でソートされる
       click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content early_end_date_task.name
 
+      # ソートリンクを押すと2回目は昇順でソートされる
       click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content slow_end_date_task.name
+    end
+
+    it 'タスク名で検索できる' do
+      non_target_task = create(:task, name: '対象外のタスク')
+      target_task = create(:task, name: '検索対象のタスク')
+
+      visit tasks_path
+
+      # 検索前はどちらも表示
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content target_task.name
+      expect(tasks[1]).to have_content non_target_task.name
+
+      # タスクを入力して検索
+      fill_in 'q[name_cont]', with: target_task.name
+      within find_by_id('task_search') do
+        click_button :commit
+      end
+
+      # 検索結果に検索対象のタスクがあり、対象外はない
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content target_task.name
+      expect(tasks[1]).not_to have_content non_target_task.name
+    end
+
+    it 'ステータスで検索できる' do
+      non_target_task = create(:task, name: '対象外のタスク')
+      target_task = create(:task, name: '検索対象のタスク', status: 'in_start')
+
+      visit tasks_path
+
+      # 検索前はどちらも表示
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content target_task.name
+      expect(tasks[1]).to have_content non_target_task.name
+
+      # ステータス着手中にチェックを入れ検索
+      check 'q_status_in_1'
+      within find_by_id('task_search') do
+        click_button :commit
+      end
+
+      # 検索結果に検索対象のタスクがあり、対象外はない
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content target_task.name
+      expect(tasks[1]).not_to have_content non_target_task.name
     end
   end
 
