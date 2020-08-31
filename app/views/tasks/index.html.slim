@@ -29,7 +29,7 @@ table
         td = task.human_attribute_enum(:status)
         td = task.human_attribute_enum(:priority)
         td
-          = form_with model: task, local: true do |form|
+          = form_with model: task, local: true, class: 'task-status-form' do |form|
             = select :task, :status, Task.enum_to_key_values_for_select_form(:status)
             = form.submit
         td

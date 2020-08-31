@@ -93,28 +93,54 @@ RSpec.describe 'Tasks', type: :system do
       expect(tasks[1]).not_to have_content non_target_task.name
     end
 
-    it '優先順位を変更できる' do
-      target_task = create(:task, name: '検索対象のタスク', priority: 'low')
-      human_middle = Task.human_attribute_enum_value(:priority, 'middle')
+    describe '値の変更' do
+      it 'ステータスを変更できる' do
+        target_task = create(:task, name: '対象のタスク', status: 'not_started')
+        human_in_start = Task.human_attribute_enum_value(:status, 'in_start')
 
-      visit tasks_path
+        visit tasks_path
 
-      # 変更前は作成時の優先順位
-      tasks = all('.task_list')
-      expect(tasks[0]).to have_content target_task.human_attribute_enum(:priority)
+        # 変更前は作成時のステータス
+        tasks = all('.task_list')
+        expect(tasks[0]).to have_content target_task.human_attribute_enum(:status)
 
-      # 優先順位を変更する
-      within tasks[0] do
-        within '.task-priority-form' do
-          select human_middle, from: 'task_priority'
-          click_button :commit
+        # ステータスを変更する
+        within tasks[0] do
+          within '.task-status-form' do
+            select human_in_start, from: 'task_status'
+            click_button :commit
+          end
         end
+
+        # ステータスが変更されている
+        visit tasks_path
+        tasks = all('.task_list')
+        expect(tasks[0]).to have_content human_in_start
       end
 
-      # 優先順位が変更されている
-      visit tasks_path
-      tasks = all('.task_list')
-      expect(tasks[0]).to have_content human_middle
+      it '優先順位を変更できる' do
+        target_task = create(:task, name: '対象のタスク', priority: 'low')
+        human_middle = Task.human_attribute_enum_value(:priority, 'middle')
+
+        visit tasks_path
+
+        # 変更前は作成時の優先順位
+        tasks = all('.task_list')
+        expect(tasks[0]).to have_content target_task.human_attribute_enum(:priority)
+
+        # 優先順位を変更する
+        within tasks[0] do
+          within '.task-priority-form' do
+            select human_middle, from: 'task_priority'
+            click_button :commit
+          end
+        end
+
+        # 優先順位が変更されている
+        visit tasks_path
+        tasks = all('.task_list')
+        expect(tasks[0]).to have_content human_middle
+      end
     end
   end
 
