@@ -19,11 +19,11 @@ RSpec.describe 'Tasks', type: :system do
 
       visit tasks_path
 
-      click_link 'end_date_title'
+      click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content early_end_date_task.name
 
-      click_link 'end_date_title'
+      click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content slow_end_date_task.name
     end
