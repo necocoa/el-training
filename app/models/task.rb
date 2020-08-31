@@ -4,12 +4,4 @@ class Task < ApplicationRecord
 
   enum status: { not_started: 0, in_start: 1, completed: 2 }
   enum priority: { low: 0, middle: 1, high: 2 }
-
-  def self.statuses_search_values
-    statuses.map { |k, v| [human_attribute_enum_value(:status, k), v.to_i] }
-  end
-
-  def self.statuses_select_values
-    statuses.map { |k, _| [human_attribute_enum_value(:status, k), k] }
-  end
 end
