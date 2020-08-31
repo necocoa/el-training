@@ -19,15 +19,32 @@ RSpec.describe 'Tasks', type: :system do
 
       visit tasks_path
 
-      # ソートリンクを押すと初回は降順でソートされる
+      # ソートリンクを押すと初回は昇順でソートされる
       click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content early_end_date_task.name
 
-      # ソートリンクを押すと2回目は昇順でソートされる
+      # ソートリンクを押すと2回目は降順でソートされる
       click_link Task.human_attribute_name(:end_date)
       tasks = all('.task_list')
       expect(tasks[0]).to have_content slow_end_date_task.name
+    end
+
+    it 'タスクを優先順位でソートできる' do
+      low_priority_task = create(:task, name: '優先順位が低いタスク', priority: 'low')
+      high_priority_task = create(:task, name: '優先順位が高いタスク', priority: 'high')
+
+      visit tasks_path
+
+      # ソートリンクを押すと初回は昇順でソートされる
+      click_link Task.human_attribute_name(:priority)
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content low_priority_task.name
+
+      # ソートリンクを押すと2回目は降順でソートされる
+      click_link "#{Task.human_attribute_name(:priority)} ▲"
+      tasks = all('.task_list')
+      expect(tasks[0]).to have_content high_priority_task.name
     end
 
     it 'タスク名で検索できる' do
