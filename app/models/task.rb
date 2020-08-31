@@ -3,12 +3,5 @@ class Task < ApplicationRecord
   validates :description, length: { maximum: 1000 }
 
   enum status: { not_started: 0, in_start: 1, completed: 2 }
-
-  def self.statuses_search_values
-    statuses.map { |k, v| [human_attribute_enum_value(:status, k), v.to_i] }
-  end
-
-  def self.statuses_select_values
-    statuses.map { |k, _| [human_attribute_enum_value(:status, k), k] }
-  end
+  enum priority: { low: 0, middle: 1, high: 2 }
 end
