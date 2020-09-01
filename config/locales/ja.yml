@@ -9,6 +9,7 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード確認
+        tasks_count: タスク数
       task:
         name: タスク名
         description: 詳細
