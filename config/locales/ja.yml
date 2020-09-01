@@ -3,7 +3,11 @@ ja:
   activerecord:
     models:
       task: タスク
+      user: ユーザー
     attributes:
+      user:
+        email: メールアドレス
+        password: パスワード
       task:
         name: タスク名
         description: 詳細
