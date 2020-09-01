@@ -8,6 +8,7 @@ ja:
       user:
         email: メールアドレス
         password: パスワード
+        password_confirmation: パスワード確認
       task:
         name: タスク名
         description: 詳細
