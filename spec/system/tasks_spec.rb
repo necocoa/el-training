@@ -1,9 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe 'Tasks', type: :system do
+  context 'ノンログイン状態' do
+    it 'ログイン画面に遷移する' do
+      visit tasks_path
+      expect(current_path).to eq login_path
+    end
+  end
+
   context 'ログイン状態' do
     let(:current_user) { create(:user) }
     before do
+      # ログイン
       visit login_path
       fill_in 'session[email]',	with: current_user.email
       fill_in 'session[password]',	with: current_user.password
@@ -11,18 +19,28 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     describe 'index' do
-      describe 'sort' do
-        it 'タスクが作成日の降順で表示される' do
-          old_task = create(:task, name: '古いタスク', user: current_user)
-          new_task = create(:task, name: '新しいタスク', user: current_user)
-          old_task.update(name: '古いタスクを更新') # 更新しても順番が変わらないことを確認するため
+      it 'タスクが作成日の降順で表示される' do
+        old_task = create(:task, name: '古いタスク', user: current_user)
+        new_task = create(:task, name: '新しいタスク', user: current_user)
+        old_task.update(name: '古いタスクを更新') # 更新しても順番が変わらないことを確認するため
+
+        visit tasks_path
+        tasks = all('.task_list')
+        expect(tasks[0]).to have_content new_task.name
+        expect(tasks[1]).to have_content old_task.name
+      end
+      context '他ユーザーのタスクがある時' do
+        it '他ユーザーのタスクは表示されない' do
+          current_task = create(:task, name: '自分のタスク', user: current_user)
+          other_task = create(:task, name: '他ユーザーのタスク')
 
           visit tasks_path
-          tasks = all('.task_list')
-          expect(tasks[0]).to have_content new_task.name
-          expect(tasks[1]).to have_content old_task.name
+          expect(page).to have_content current_task.name
+          expect(page).not_to have_content other_task.name
         end
+      end
 
+      describe 'sort' do
         it 'タスクを終了期限でソートできる' do
           slow_end_date_task = create(:task, name: '期限が遅いタスク', end_date: '2020-02-01', user: current_user)
           early_end_date_task = create(:task, name: '期限が早いタスク', end_date: '2020-01-01', user: current_user)
@@ -163,6 +181,12 @@ RSpec.describe 'Tasks', type: :system do
         visit task_path(task)
         expect(page).to have_content task.name
       end
+      context '他ユーザーのタスクを表示した時' do
+        it 'RecordNotFoundが発生する' do
+          other_task = create(:task, name: '他ユーザーのタスク')
+          expect { visit task_path(other_task) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
     end
 
     describe 'create' do
@@ -206,17 +230,25 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content update_task_name
         expect(page).to have_content task.description
       end
+      context '他ユーザーのタスクを編集した時' do
+        it 'RecordNotFoundが発生する' do
+          other_task = create(:task, name: '他ユーザーのタスク')
+          expect { visit edit_task_path(other_task) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
     end
 
-    describe 'destroy', js: true do
-      let(:task) { create(:task, user: current_user) }
-      it 'タスクを削除する' do
-        visit task_path(task)
+    describe 'destroy' do
+      context 'タスクページから削除する時', js: true do
+        let(:task) { create(:task, user: current_user) }
+        it 'タスクを削除する' do
+          visit task_path(task)
 
-        page.accept_confirm('タスクを削除しますか？') { click_on :task_delete }
+          page.accept_confirm('タスクを削除しますか？') { click_on :task_delete }
 
-        expect(current_path).to eq tasks_path
-        expect(page).to have_content 'タスクを削除しました。'
+          expect(current_path).to eq tasks_path
+          expect(page).to have_content 'タスクを削除しました。'
+        end
       end
     end
   end
