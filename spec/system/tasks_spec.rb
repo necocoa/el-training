@@ -195,11 +195,13 @@ RSpec.describe 'Tasks', type: :system do
 
         fill_in 'task[name]', with: 'Task name'
         fill_in 'task[description]', with: 'Task description'
-        click_button :commit
 
-        expect(page).to have_content 'タスクを作成しました。'
-        expect(page).to have_content 'Task name'
-        expect(page).to have_content 'Task description'
+        expect do
+          click_button :commit
+          expect(page).to have_content 'タスクを作成しました。'
+          expect(page).to have_content 'Task name'
+          expect(page).to have_content 'Task description'
+        end.to change { Task.count }.by(1)
       end
       context '名前を入力していない時' do
         it 'エラーメッセージが表示される' do
@@ -243,11 +245,11 @@ RSpec.describe 'Tasks', type: :system do
         let(:task) { create(:task, user: current_user) }
         it 'タスクを削除する' do
           visit task_path(task)
-
-          page.accept_confirm('タスクを削除しますか？') { click_on :task_delete }
-
-          expect(current_path).to eq tasks_path
-          expect(page).to have_content 'タスクを削除しました。'
+          expect do
+            page.accept_confirm('タスクを削除しますか？') { click_on :task_delete }
+            expect(current_path).to eq tasks_path
+            expect(page).to have_content 'タスクを削除しました。'
+          end.to change { Task.count }.by(-1)
         end
       end
     end
