@@ -2,7 +2,7 @@ class Admin::UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
 
   def index
-    @users = User.page(params[:page]).order(created_at: :desc)
+    @users = User.join_tasks_count.page.order(created_at: :desc)
   end
 
   def show; end
