@@ -33,8 +33,8 @@ RSpec.describe 'Users', type: :system do
       it 'タスク数が表示される' do
         create(:task, user: test_user)
         visit admin_users_path
-        tasks_count = find_by_id('tasks_count')
-        expect(tasks_count.text).to eq test_user.tasks.size.to_s
+        tasks_count = find_by_id('tasks_count').text
+        expect(tasks_count).to eq test_user.tasks.count.to_s
       end
     end
 
