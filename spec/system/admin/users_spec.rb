@@ -86,6 +86,14 @@ RSpec.describe 'Users', type: :system do
             expect(page).to have_content 'ユーザーを削除しました。'
           end.to change { User.count }.by(-1)
         end
+
+        it '関連タスクもすべて削除される' do
+          create(:task, user: target_user)
+          visit admin_user_path(target_user)
+          page.accept_confirm('ユーザーを削除しますか？') { click_on :user_delete }
+          visit current_path
+          expect(target_user.tasks.count).to eq 0
+        end
       end
     end
   end
