@@ -1,0 +1,7 @@
+h1 タスク詳細
+
+h2 = @user.name
+p = @user.email
+
+= link_to '編集', edit_admin_user_path(@user)
+= link_to '削除', admin_user_path(@user), method: :delete, id: 'user_delete', data: { confirm: 'ユーザーを削除しますか？' }

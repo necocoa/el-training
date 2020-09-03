@@ -43,19 +43,6 @@ Style/NumericLiterals:
 Style/Lambda:
   EnforcedStyle: literal
 
-######## Layout ########
-# private/protected は一段深くインデントする
-Layout/IndentationConsistency:
-  EnforcedStyle: indented_internal_methods
-
-# 行の長さを変更
-Layout/LineLength:
-  IgnoredPatterns: ['\A#'] # コメントは除外
-  Exclude:
-    - 'db/fixtures/**/*' # seedファイルは除外
-    - 'spec/**/*' # specファイルは除外
-    - 'db/migrate/**/*' # migrateファイルは除外
-
 ######## Metrics ########
 # メソッドのサイズ
 Metrics/AbcSize:
@@ -85,6 +72,15 @@ Bundler/OrderedGems:
 Rails/DynamicFindBy:
   Exclude:
     - 'spec/**/*'
+
+######## Layout ########
+# 行の長さを変更
+Layout/LineLength:
+  IgnoredPatterns: ['\A#'] # コメントは除外
+  Exclude:
+    - 'db/fixtures/**/*' # seedファイルは除外
+    - 'spec/**/*' # specファイルは除外
+    - 'db/migrate/**/*' # migrateファイルは除外
 
 # 自動生成ファイル除外
 Style/BlockComments:

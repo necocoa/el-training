@@ -1,0 +1,45 @@
+h1 タスク一覧
+
+= search_form_for @q do |f|
+  .
+    = f.label :name, 'キーワード検索'
+    = f.search_field :name_cont
+
+  .
+    = f.label :status
+    - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
+      = name
+      = f.check_box :status_in, {  multiple: true }, key, nil
+
+  = f.submit "検索"
+
+table
+  thead
+    tr
+      th = Task.human_attribute_name(:name)
+      th = sort_link @q, :end_date, Task.human_attribute_name(:end_date)
+      th = Task.human_attribute_name(:status)
+      th = sort_link @q, :priority, Task.human_attribute_name(:priority)
+
+  tbody
+    - @tasks.each do |task|
+      tr.task_list
+        td = link_to task.name, task
+        td = task.end_date
+        td = task.human_attribute_enum(:status)
+        td = task.human_attribute_enum(:priority)
+        td
+          = form_with model: task, local: true, class: 'task-status-form' do |form|
+            = select :task, :status, Task.enum_to_key_values_for_select_form(:status)
+            = form.submit
+        td
+          = form_with model: task, local: true, class: 'task-priority-form' do |form|
+            = select :task, :priority, Task.enum_to_key_values_for_select_form(:priority)
+            = form.submit
+
+        td = link_to '編集', edit_task_path(task)
+        td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
+
+.
+  = paginate @tasks
+  = page_entries_info @tasks
