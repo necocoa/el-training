@@ -4,6 +4,7 @@ ja:
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
     attributes:
       user:
         email: メールアドレス
@@ -25,6 +26,8 @@ ja:
         low: 低
         middle: 中
         high: 高
+      label:
+        name: ラベル
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"

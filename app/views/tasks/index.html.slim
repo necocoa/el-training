@@ -13,6 +13,13 @@ h1 タスク一覧
 
   = f.submit "検索"
 
+= form_with url: labels_path, local: true do |form|
+  .
+    = form.label :name, 'ラベル名'
+    = form.text_field 'label[name]', size: 55, maxlength: 50, required: true
+
+  = form.submit "ラベルを作成"
+
 table
   thead
     tr

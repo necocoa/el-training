@@ -9,4 +9,5 @@ Rails.application.routes.draw do
     end
   end
   resources :tasks
+  resources :labels, only: %i[create destroy]
 end
