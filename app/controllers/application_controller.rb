@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  class NotAuthorizedError < StandardError; end
   helper_method :current_user
   before_action :login_required
 
@@ -10,5 +11,9 @@ class ApplicationController < ActionController::Base
 
   def login_required
     redirect_to login_path unless current_user
+  end
+
+  def admin_required
+    raise NotAuthorizedError, '権限がありません。' unless current_user.admin?
   end
 end
