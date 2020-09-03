@@ -18,7 +18,7 @@ RSpec.describe 'Users', type: :system do
       click_button :commit
     end
     it 'NotAuthorizedErrorが発生する' do
-      expect { visit admin_users_path }.to raise_error(ApplicationController::NotAuthorizedError)
+      expect { visit admin_users_path }.to raise_error(Admin::AdminController::NotAuthorizedError)
     end
   end
 
