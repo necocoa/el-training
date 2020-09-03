@@ -1,4 +1,5 @@
-= form_with  url: path, model: user, local: true do |form|
+/ = form_with  url: path, model: user, local: true do |form|
+= form_with model: [:admin, user], local: true do |form|
   - if user.errors.any?
     #error_explanation
       h2 ユーザーが保存されませんでした
