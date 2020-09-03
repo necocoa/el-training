@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
+  validates :admin, inclusion: { in: [true, false] }
 
   scope :join_tasks_count, -> { left_joins(:tasks).select('users.*, COUNT(tasks.id) AS tasks_count').group(:id) }
 end
