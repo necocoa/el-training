@@ -76,17 +76,20 @@ RSpec.describe 'Users', type: :system do
     end
 
     describe 'update' do
+      let(:test_user) { create(:user) }
       let(:update_user_name) { 'Change user name' }
       it 'ユーザーが編集できる' do
-        visit edit_admin_user_path(test_admin_user)
-        expect(page).to have_field 'user[name]', with: test_admin_user.name
+        visit edit_admin_user_path(test_user)
+        expect(page).to have_field 'user[name]', with: test_user.name
         fill_in 'user[name]', with: update_user_name
-        fill_in 'user[password]', with: test_admin_user.password
-        fill_in 'user[password_confirmation]', with: test_admin_user.password
+        fill_in 'user[password]', with: test_user.password
+        fill_in 'user[password_confirmation]', with: test_user.password
+        check 'user[admin]'
         click_button :commit
 
         expect(page).to have_content 'ユーザーを編集しました。'
         expect(page).to have_content update_user_name
+        expect(test_user.reload.admin?).to eq true
       end
     end
     describe 'destroy' do
