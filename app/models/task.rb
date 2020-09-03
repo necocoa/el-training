@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  has_many :task_labels, dependent: :destroy
   belongs_to :user
 
   validates :name, presence: true, length: { in: 1..50 }
