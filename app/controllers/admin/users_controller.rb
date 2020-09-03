@@ -36,12 +36,12 @@ class Admin::UsersController < ApplicationController
     if @user.destroy
       redirect_to admin_users_path, notice: 'ユーザーを削除しました。'
     else
-      error_message = if @user.errors.any?
+      error_messages = if @user.errors.any?
                         @user.errors.full_messages.join('\n')
                       else
                         '不明な理由で、ユーザーの削除に失敗しました。'
                       end
-      redirect_to admin_users_path, alert: error_message
+      redirect_to admin_users_path, alert: error_messages
     end
   end
 
