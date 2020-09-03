@@ -16,6 +16,11 @@
     = form.email_field :email, required: true
 
   .
+    p = form.label :admin
+    = form.check_box :admin
+      | 管理者権限
+
+  .
     p = form.label :password
     = form.password_field :password, required: true
 

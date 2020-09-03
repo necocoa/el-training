@@ -10,6 +10,7 @@ end
 seed_user = User.create!(
   name: 'seed user',
   email: 'seed@example.com',
+  admin: true,
   password: 'seed_password',
   password_confirmation: 'seed_password'
 )
