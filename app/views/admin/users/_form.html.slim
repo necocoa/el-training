@@ -1,4 +1,5 @@
-= form_with  url: path, model: user, local: true do |form|
+/ = form_with  url: path, model: user, local: true do |form|
+= form_with model: [:admin, user], local: true do |form|
   - if user.errors.any?
     #error_explanation
       h2 ユーザーが保存されませんでした
@@ -13,6 +14,11 @@
   .
     p = form.label :email
     = form.email_field :email, required: true
+
+  .
+    p = form.label :admin
+    = form.check_box :admin
+      | 管理者権限
 
   .
     p = form.label :password

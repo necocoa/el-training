@@ -3,5 +3,8 @@ ul
     li = link_to  "タスク一覧", tasks_path
     li = link_to  "タスク作成", new_task_path
     li = link_to 'ログアウト', logout_path, method: :delete
+    - if current_user.admin?
+      li = link_to  "ユーザ一覧", admin_users_path
+      li = link_to  "ユーザ作成", new_admin_user_path
   - else
-   li = link_to 'ログイン', login_path
+    li = link_to 'ログイン', login_path

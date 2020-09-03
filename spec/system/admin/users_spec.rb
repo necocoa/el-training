@@ -8,13 +8,27 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
-  context 'ログイン状態' do
-    let(:test_user) { create(:user) }
+  context '一般ユーザーがログイン状態の時' do
+    let(:non_admin_user) { create(:user) }
     before do
       # ログイン
       visit login_path
-      fill_in 'session[email]',	with: test_user.email
-      fill_in 'session[password]',	with: test_user.password
+      fill_in 'session[email]',	with: non_admin_user.email
+      fill_in 'session[password]',	with: non_admin_user.password
+      click_button :commit
+    end
+    it 'NotAuthorizedErrorが発生する' do
+      expect { visit admin_users_path }.to raise_error(Admin::AdminController::NotAuthorizedError)
+    end
+  end
+
+  context '管理者ユーザーがログイン状態の時' do
+    let(:test_admin_user) { create(:user, admin: true) }
+    before do
+      # ログイン
+      visit login_path
+      fill_in 'session[email]',	with: test_admin_user.email
+      fill_in 'session[password]',	with: test_admin_user.password
       click_button :commit
     end
 
@@ -31,17 +45,17 @@ RSpec.describe 'Users', type: :system do
       end
 
       it 'タスク数が表示される' do
-        create(:task, user: test_user)
+        create(:task, user: test_admin_user)
         visit admin_users_path
         tasks_count = find_by_id('tasks_count').text
-        expect(tasks_count).to eq test_user.tasks.count.to_s
+        expect(tasks_count).to eq test_admin_user.tasks.count.to_s
       end
     end
 
     describe 'show' do
       it 'ユーザーが表示される' do
-        visit admin_user_path(test_user)
-        expect(page).to have_content test_user.name
+        visit admin_user_path(test_admin_user)
+        expect(page).to have_content test_admin_user.name
       end
     end
 
@@ -62,6 +76,7 @@ RSpec.describe 'Users', type: :system do
     end
 
     describe 'update' do
+      let(:test_user) { create(:user) }
       let(:update_user_name) { 'Change user name' }
       it 'ユーザーが編集できる' do
         visit edit_admin_user_path(test_user)
@@ -69,10 +84,12 @@ RSpec.describe 'Users', type: :system do
         fill_in 'user[name]', with: update_user_name
         fill_in 'user[password]', with: test_user.password
         fill_in 'user[password_confirmation]', with: test_user.password
+        check 'user[admin]'
         click_button :commit
 
         expect(page).to have_content 'ユーザーを編集しました。'
         expect(page).to have_content update_user_name
+        expect(test_user.reload.admin?).to eq true
       end
     end
     describe 'destroy' do

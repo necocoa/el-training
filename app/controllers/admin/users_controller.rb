@@ -1,4 +1,4 @@
-class Admin::UsersController < ApplicationController
+class Admin::UsersController < Admin::AdminController
   before_action :set_user, only: %i[show edit update destroy]
 
   def index
@@ -35,7 +35,12 @@ class Admin::UsersController < ApplicationController
     if @user.destroy
       redirect_to admin_users_path, notice: 'ユーザーを削除しました。'
     else
-      redirect_to admin_users_path, alert: 'ユーザーの削除に失敗しました。'
+      error_messages = if @user.errors.any?
+                         @user.errors.full_messages.join('\n')
+                       else
+                         '不明な理由で、ユーザーの削除に失敗しました。'
+                       end
+      redirect_to admin_users_path, alert: error_messages
     end
   end
 
@@ -46,6 +51,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :admin, :password, :password_confirmation)
   end
 end
