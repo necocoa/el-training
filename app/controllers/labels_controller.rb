@@ -18,7 +18,14 @@ class LabelsController < ApplicationController
     end
   end
 
-  def destroy; end
+  def destroy
+    label = current_user.labels.find(params[:id])
+    if label.destroy
+      redirect_back fallback_location: tasks_path, notice: 'ラベルを削除しました。'
+    else
+      redirect_back fallback_location: tasks_path, alert: 'ラベルの削除に失敗しました。'
+    end
+  end
 
   private
 
