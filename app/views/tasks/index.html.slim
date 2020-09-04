@@ -10,7 +10,7 @@ h1 タスク一覧
     = f.label :status
     .
       - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
-        = f.check_box :status_in, {  multiple: true }, key
+        = f.check_box :status_in, {  multiple: true }, key, nil
         = f.label "status_in_#{key}", name
 
   .
