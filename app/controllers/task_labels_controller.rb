@@ -5,14 +5,14 @@ class TaskLabelsController < ApplicationController
     task_label = @task.task_labels.new(task_label_params)
 
     if task_label.save
-      redirect_to tasks_path, notice: 'ラベルを付けました。'
+      redirect_back fallback_location: tasks_path, notice: 'ラベルを付けました。'
     else
       error_messages = if task_label.errors.any?
                          task_label.errors.full_messages.join('\n')
                        else
                          '不明な理由で、ラベルの添付に失敗しました。'
                        end
-      redirect_to tasks_path, alert: error_messages
+      redirect_back fallback_location: tasks_path, alert: error_messages
     end
   end
 

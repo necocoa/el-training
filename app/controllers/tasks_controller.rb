@@ -27,7 +27,13 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to @task, notice: 'タスクを編集しました。'
+      flash.notice = 'タスクを編集しました。'
+      # editページからupdateの場合はtask_pathに返す、それ以外は元のページに戻る
+      if URI.parse(request.headers['Referer']).path == edit_task_path(@task)
+        redirect_to @task
+      else
+        redirect_back fallback_location: @task
+      end
     else
       render :edit
     end
