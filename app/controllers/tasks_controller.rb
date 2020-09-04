@@ -7,7 +7,9 @@ class TasksController < ApplicationController
     @tasks = @q.result.includes(:labels).page(params[:page]).order(created_at: :desc)
   end
 
-  def show; end
+  def show
+    @my_labels = current_user.labels
+  end
 
   def new
     @task = current_user.tasks.new
