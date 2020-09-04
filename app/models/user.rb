@@ -17,4 +17,8 @@ class User < ApplicationRecord
     errors.add :admin, '管理者が0人になるため削除できません。'
     raise ActiveRecord::Rollback
   end
+
+  def labels_for_search_form
+    labels.map { |label| [label.name, label.id] }
+  end
 end

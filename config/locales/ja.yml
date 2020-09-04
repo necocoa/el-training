@@ -18,6 +18,7 @@ ja:
         end_date: 終了期限
         status: ステータス
         priority: 優先順位
+        label: ラベル
       task/status:
         not_started: 未着手
         in_start: 着手中

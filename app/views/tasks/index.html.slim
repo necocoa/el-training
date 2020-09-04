@@ -3,13 +3,22 @@ h1 タスク一覧
 = search_form_for @q do |f|
   .
     = f.label :name, 'キーワード検索'
-    = f.search_field :name_cont
+    .
+      = f.search_field :name_cont
 
   .
     = f.label :status
-    - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
-      = name
-      = f.check_box :status_in, {  multiple: true }, key, nil
+    .
+      - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
+        = name
+        = f.check_box :status_in, {  multiple: true }, key, nil
+
+  .
+    = f.label :label
+    .
+      - current_user.labels_for_search_form.each do |name, key|
+        = name
+        = f.check_box :labels_id_in, {  multiple: true }, key, nil
 
   = f.submit "検索"
 
