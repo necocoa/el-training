@@ -2,11 +2,14 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
+    @my_labels = current_user.labels
     @q = current_user.tasks.ransack(params[:q])
-    @tasks = @q.result.page(params[:page]).order(created_at: :desc)
+    @tasks = @q.result.includes(:labels).page(params[:page]).order(created_at: :desc)
   end
 
-  def show; end
+  def show
+    @my_labels = current_user.labels
+  end
 
   def new
     @task = current_user.tasks.new
@@ -26,7 +29,13 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to @task, notice: 'タスクを編集しました。'
+      flash.notice = 'タスクを編集しました。'
+      # editページからupdateの場合はtask_pathに返す、それ以外は元のページに戻る
+      if URI.parse(request.headers['Referer']).path == edit_task_path(@task)
+        redirect_to @task
+      else
+        redirect_back fallback_location: @task
+      end
     else
       render :edit
     end

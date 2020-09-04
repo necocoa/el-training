@@ -3,15 +3,29 @@ h1 タスク一覧
 = search_form_for @q do |f|
   .
     = f.label :name, 'キーワード検索'
-    = f.search_field :name_cont
+    .
+      = f.search_field :name_cont
 
   .
     = f.label :status
-    - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
-      = name
-      = f.check_box :status_in, {  multiple: true }, key, nil
+    .
+      - Task.enum_to_key_values_for_search_form(:status).each do |name, key|
+        = f.check_box :status_in, {  multiple: true }, key, nil
+        = f.label "status_in_#{key}", name
+
+  .
+    = f.label :label
+    .
+      = f.collection_check_boxes :labels_id_in, current_user.labels, :id, :name
 
   = f.submit "検索"
+
+= form_with url: labels_path, local: true, id: 'label_create_form' do |form|
+  .
+    = form.label :name, 'ラベル名'
+    = form.text_field 'label[name]', size: 55, maxlength: 50, required: true
+
+  = form.submit "ラベルを作成"
 
 table
   thead
@@ -20,6 +34,7 @@ table
       th = sort_link @q, :end_date, Task.human_attribute_name(:end_date)
       th = Task.human_attribute_name(:status)
       th = sort_link @q, :priority, Task.human_attribute_name(:priority)
+      th = Label.human_attribute_name(:name)
 
   tbody
     - @tasks.each do |task|
@@ -28,6 +43,7 @@ table
         td = task.end_date
         td = task.human_attribute_enum(:status)
         td = task.human_attribute_enum(:priority)
+        td = task.labels_name.join(', ')
         td
           = form_with model: task, local: true, class: 'task-status-form' do |form|
             = select :task, :status, Task.enum_to_key_values_for_select_form(:status)
@@ -36,6 +52,11 @@ table
           = form_with model: task, local: true, class: 'task-priority-form' do |form|
             = select :task, :priority, Task.enum_to_key_values_for_select_form(:priority)
             = form.submit
+
+        td
+          = form_with url: task_task_labels_path(task), local: true, class: 'task_labels_form' do |form|
+            = select :task_label, :label_id, task.not_attached_labels_to_select_form_values(@my_labels)
+            = form.submit 'ラベルを付ける'
 
         td = link_to '編集', edit_task_path(task)
         td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }

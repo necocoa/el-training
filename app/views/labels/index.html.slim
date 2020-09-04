@@ -1,0 +1,19 @@
+h1 タスク一覧
+
+= form_with url: labels_path, local: true, id: 'label_create_form' do |form|
+  .
+    = form.label :name, 'ラベル名'
+    = form.text_field 'label[name]', size: 55, maxlength: 50, required: true
+
+  = form.submit "ラベルを作成"
+
+table
+  thead
+    tr
+      th = Label.human_attribute_name(:name)
+
+  tbody
+    - @labels.each do |label|
+      tr.label_list
+        td = label.name
+        td = link_to '削除', label, method: :delete, data: { confirm: 'ラベルを削除しますか？' }

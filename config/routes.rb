@@ -8,5 +8,8 @@ Rails.application.routes.draw do
       resources :tasks, only: :index
     end
   end
-  resources :tasks
+  resources :tasks do
+    resources :task_labels, only: %i[create destroy]
+  end
+  resources :labels, only: %i[index create destroy]
 end

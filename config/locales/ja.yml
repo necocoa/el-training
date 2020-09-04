@@ -4,6 +4,7 @@ ja:
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
     attributes:
       user:
         email: メールアドレス
@@ -17,6 +18,7 @@ ja:
         end_date: 終了期限
         status: ステータス
         priority: 優先順位
+        label: ラベル
       task/status:
         not_started: 未着手
         in_start: 着手中
@@ -25,6 +27,12 @@ ja:
         low: 低
         middle: 中
         high: 高
+      label:
+        name: ラベル
+        user_id: ユーザー
+      task_label:
+        label_id: ラベル
+        user_id: ユーザー
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"
