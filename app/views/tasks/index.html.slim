@@ -57,7 +57,7 @@ table
 
         td
           = form_with url: task_task_labels_path(task), local: true do |form|
-            = select :task_label, :label_id, task.not_attached_labels_to_select_form_values
+            = select :task_label, :label_id, task.not_attached_labels_to_select_form_values(@my_labels)
             = form.submit 'ラベルを付ける'
 
         td = link_to '編集', edit_task_path(task)

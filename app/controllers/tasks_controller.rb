@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
+    @my_labels = current_user.labels
     @q = current_user.tasks.ransack(params[:q])
     @tasks = @q.result.includes(:labels).page(params[:page]).order(created_at: :desc)
   end
