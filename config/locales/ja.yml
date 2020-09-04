@@ -29,6 +29,10 @@ ja:
         high: 高
       label:
         name: ラベル
+        user_id: ユーザー
+      task_label:
+        label_id: ラベル
+        user_id: ユーザー
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"
