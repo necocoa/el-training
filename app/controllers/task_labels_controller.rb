@@ -16,7 +16,14 @@ class TaskLabelsController < ApplicationController
     end
   end
 
-  def destroy; end
+  def destroy
+    task_label = @task.task_labels.find(params[:id])
+    if task_label.destroy
+      redirect_back fallback_location: root_path, notice: 'ラベルを外しました。'
+    else
+      redirect_back fallback_location: tasks_path, alert: 'ラベルの削除に失敗しました。'
+    end
+  end
 
   private
 

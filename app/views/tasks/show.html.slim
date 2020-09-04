@@ -17,7 +17,11 @@ h2 = @task.name
         td = @task.human_attribute_enum(:priority)
       tr
         th = Label.human_attribute_name(:name)
-        td = @task.labels_name.join(', ')
+        td
+          - @task.task_labels.includes(:label).each do |task_label|
+            = task_label.label.name
+            = link_to '外す', task_task_label_path(task_label.task_id, task_label.id), method: :delete
+
 
 = link_to '編集', edit_task_path(@task.id), id: 'task_edit'
 = link_to ' 削除', @task, method: :delete, id: 'task_delete', data: { confirm: 'タスクを削除しますか？' }
@@ -33,4 +37,3 @@ h2 = @task.name
 = form_with url: task_task_labels_path(@task), local: true, class: 'task_labels_form' do |form|
   = select :task_label, :label_id, @task.not_attached_labels_to_select_form_values(@my_labels)
   . = form.submit 'ラベルを付ける'
-
