@@ -1,4 +1,8 @@
 class LabelsController < ApplicationController
+  def index
+    @labels = current_user.labels
+  end
+
   def create
     label = current_user.labels.new(label_params)
 

@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   resources :tasks do
     resources :task_labels, only: %i[create destroy]
   end
-  resources :labels, only: %i[create destroy]
+  resources :labels, only: %i[index create destroy]
 end

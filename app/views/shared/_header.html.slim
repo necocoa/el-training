@@ -2,6 +2,7 @@ ul
   - if current_user
     li = link_to  "タスク一覧", tasks_path
     li = link_to  "タスク作成", new_task_path
+    li = link_to  "ラベル一覧", labels_path
     li = link_to 'ログアウト', logout_path, method: :delete
     - if current_user.admin?
       li = link_to  "ユーザ一覧", admin_users_path
