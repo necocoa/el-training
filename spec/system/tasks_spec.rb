@@ -89,7 +89,7 @@ RSpec.describe 'Tasks', type: :system do
           expect(tasks[0]).to have_content target_task.name
           expect(tasks[1]).to have_content non_target_task.name
 
-          # タスクを入��して検索
+          # タスク名を入力して検索
           within find_by_id('task_search') do
             fill_in 'q[name_cont]', with: target_task.name
             click_button :commit
