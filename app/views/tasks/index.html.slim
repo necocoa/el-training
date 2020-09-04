@@ -27,6 +27,7 @@ table
       th = sort_link @q, :end_date, Task.human_attribute_name(:end_date)
       th = Task.human_attribute_name(:status)
       th = sort_link @q, :priority, Task.human_attribute_name(:priority)
+      th = Label.human_attribute_name(:name)
 
   tbody
     - @tasks.each do |task|
@@ -35,6 +36,7 @@ table
         td = task.end_date
         td = task.human_attribute_enum(:status)
         td = task.human_attribute_enum(:priority)
+        td = task.labels_name.join(', ')
         td
           = form_with model: task, local: true, class: 'task-status-form' do |form|
             = select :task, :status, Task.enum_to_key_values_for_select_form(:status)
