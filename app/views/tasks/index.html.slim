@@ -22,7 +22,7 @@ h1 タスク一覧
 
   = f.submit "検索"
 
-= form_with url: labels_path, local: true do |form|
+= form_with url: labels_path, local: true, id: 'label_create_form' do |form|
   .
     = form.label :name, 'ラベル名'
     = form.text_field 'label[name]', size: 55, maxlength: 50, required: true
@@ -56,7 +56,7 @@ table
             = form.submit
 
         td
-          = form_with url: task_task_labels_path(task), local: true do |form|
+          = form_with url: task_task_labels_path(task), local: true, class: 'task_labels_form' do |form|
             = select :task_label, :label_id, task.not_attached_labels_to_select_form_values(@my_labels)
             = form.submit 'ラベルを付ける'
 

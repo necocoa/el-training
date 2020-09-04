@@ -29,6 +29,7 @@ RSpec.describe 'Tasks', type: :system do
         expect(tasks[0]).to have_content new_task.name
         expect(tasks[1]).to have_content old_task.name
       end
+
       context '他ユーザーのタスクがある時' do
         it '他ユーザーのタスクは表示されない' do
           current_task = create(:task, name: '自分のタスク', user: current_user)
@@ -89,8 +90,8 @@ RSpec.describe 'Tasks', type: :system do
           expect(tasks[1]).to have_content non_target_task.name
 
           # タスクを入��して検索
-          fill_in 'q[name_cont]', with: target_task.name
           within find_by_id('task_search') do
+            fill_in 'q[name_cont]', with: target_task.name
             click_button :commit
           end
 
@@ -112,8 +113,8 @@ RSpec.describe 'Tasks', type: :system do
           expect(tasks[1]).to have_content non_target_task.name
 
           # ステータス着手中にチェックを入れ検索
-          check 'q_status_in_1'
           within find_by_id('task_search') do
+            check 'q_status_in_1'
             click_button :commit
           end
 
@@ -121,6 +122,68 @@ RSpec.describe 'Tasks', type: :system do
           tasks = all('.task_list')
           expect(tasks[0]).to have_content target_task.name
           expect(tasks[1]).not_to have_content non_target_task.name
+        end
+
+        it 'ラベルで検索できる' do
+          non_target_task = create(:task, name: '対象外のタスク', user: current_user)
+          target_task = create(:task, name: '検索対象のタスク', user: current_user)
+          target_label = create(:label, user: current_user)
+          create(:task_label, task: target_task, label: target_label)
+
+          visit tasks_path
+          # 検索前はどちらも表示
+          tasks = all('.task_list')
+          expect(tasks[0]).to have_content target_task.name
+          expect(tasks[1]).to have_content non_target_task.name
+
+          within find_by_id('task_search') do
+            check 'q[labels_id_in][]'
+            click_button :commit
+          end
+          tasks = all('.task_list')
+          expect(tasks[0]).to have_content target_task.name
+          expect(tasks[1]).not_to have_content non_target_task.name
+        end
+      end
+
+      describe 'ラベル' do
+        it 'ラベルが作成できる' do
+          visit tasks_path
+          expect do
+            within find_by_id('label_create_form') do
+              fill_in 'label[name]', with: 'ラベル'
+              click_button :commit
+            end
+          end.to change { current_user.labels.count }.by(1)
+        end
+
+        it 'ラベルを付けられる' do
+          target_task = create(:task, user: current_user)
+          target_label = create(:label, user: current_user)
+          visit tasks_path
+          expect do
+            within all('.task_list')[0] do
+              within '.task_labels_form' do
+                select target_label.name, from: 'task_label[label_id]'
+                click_button :commit
+              end
+            end
+          end.to change { target_task.task_labels.where(label_id: target_label.id).count }.from(0).to(1)
+        end
+
+        it 'ラベル選択フォームにアタッチ済みのラベルが表示されない' do
+          task = create(:task, user: current_user)
+          attached_label = create(:label, name: 'ラベル1', user: current_user)
+          not_attached_label = create(:label, name: 'ラベル2', user: current_user)
+          create(:task_label, task: task, label: attached_label)
+          visit tasks_path
+          within all('.task_list')[0] do
+            within '.task_labels_form' do
+              option_values = all('option').map(&:text)
+              expect(option_values).to include not_attached_label.name
+              expect(option_values).not_to include attached_label.name
+            end
+          end
         end
       end
 
