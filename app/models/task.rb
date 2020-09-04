@@ -12,4 +12,10 @@ class Task < ApplicationRecord
   def labels_name
     labels.map(&:name)
   end
+
+  def not_attached_labels_to_select_form_values
+    current_labels = user.labels
+    no_attached_labels = current_labels - labels
+    no_attached_labels.map { |label| [label.name, label.id] }
+  end
 end

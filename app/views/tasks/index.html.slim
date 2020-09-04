@@ -46,6 +46,11 @@ table
             = select :task, :priority, Task.enum_to_key_values_for_select_form(:priority)
             = form.submit
 
+        td
+          = form_with url: task_task_labels_path(task), local: true do |form|
+            = select :task_label, :label_id, task.not_attached_labels_to_select_form_values
+            = form.submit 'ラベルを付ける'
+
         td = link_to '編集', edit_task_path(task)
         td = link_to '削除', task, method: :delete, data: { confirm: 'タスクを削除しますか？' }
 
