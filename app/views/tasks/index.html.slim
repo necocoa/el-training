@@ -16,9 +16,7 @@ h1 タスク一覧
   .
     = f.label :label
     .
-      - current_user.labels_for_search_form.each do |name, key|
-        = name
-        = f.check_box :labels_id_in, {  multiple: true }, key, nil
+      = f.collection_check_boxes :labels_id_in, current_user.labels, :id, :name
 
   = f.submit "検索"
 
