@@ -17,8 +17,9 @@ RSpec.describe 'Users', type: :system do
       fill_in 'session[password]',	with: non_admin_user.password
       click_button :commit
     end
-    it 'NotAuthorizedErrorが発生する' do
-      expect { visit admin_users_path }.to raise_error(Admin::AdminController::NotAuthorizedError)
+    it '403エラーが発生する' do
+      visit admin_users_path
+      expect(page.status_code).to eq 403
     end
   end
 

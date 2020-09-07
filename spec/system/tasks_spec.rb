@@ -245,9 +245,10 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content task.name
       end
       context '他ユーザーのタスクを表示した時' do
-        it 'RecordNotFoundが発生する' do
+        it '404エラーが発生する' do
           other_task = create(:task, name: '他ユーザーのタスク')
-          expect { visit task_path(other_task) }.to raise_error(ActiveRecord::RecordNotFound)
+          visit task_path(other_task)
+          expect(page.status_code).to eq 404
         end
       end
     end
@@ -296,9 +297,10 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content task.description
       end
       context '他ユーザーのタスクを編集した時' do
-        it 'RecordNotFoundが発生する' do
+        it '404エラーが発生する' do
           other_task = create(:task, name: '他ユーザーのタスク')
-          expect { visit edit_task_path(other_task) }.to raise_error(ActiveRecord::RecordNotFound)
+          visit edit_task_path(other_task)
+          expect(page.status_code).to eq 404
         end
       end
     end
