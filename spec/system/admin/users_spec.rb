@@ -100,7 +100,6 @@ RSpec.describe 'Users', type: :system do
           visit admin_user_path(target_user)
           expect do
             page.accept_confirm('ユーザーを削除しますか？') { click_on :user_delete }
-            expect(current_path).to eq admin_users_path
             expect(page).to have_content 'ユーザーを削除しました。'
           end.to change { User.count }.by(-1)
         end

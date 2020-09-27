@@ -46,7 +46,7 @@ jobs:
         run: bin/rails db:setup
 
       - name: Run rspec
-        run: bundle exec rspec
+        run: bundle exec rspec --profile 10
 
   linters:
     runs-on: ubuntu-latest
